@@ -1,0 +1,21 @@
+1) DropdownList
+Fe -> 
+ <asp:DropDownList ID="DropDownList2" runat="server" OnSelectedIndexChanged="DropDownList2_SelectedIndexChanged">
+   </asp:DropDownList> 
+
+Be ->
+protected void DropDownList2_SelectedIndexChanged(object sender, EventArgs e)
+ {
+     con = new SqlConnection(cs);
+     SqlDataAdapter da = new SqlDataAdapter("SELECT role, id FROM Role", con);
+
+     DataTable dt = new DataTable();
+     da.Fill(dt);
+
+     DropDownList2.DataSource = dt;
+     DropDownList2.DataTextField = "role";  // Using the correct column name for role name
+     DropDownList2.DataValueField = "id";  // Using the correct column name for role ID
+     DropDownList2.DataBind();
+
+     DropDownList2.Items.Insert(0, new ListItem("Select Role", "0"));
+ }
