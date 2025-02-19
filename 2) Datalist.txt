@@ -1,0 +1,67 @@
+1) Datalist 
+		Inside card render Data
+Fe ->
+<div class="view-product-container" >
+    <asp:DataList ID="DataList1" runat="server" RepeatColumns="4" RepeatDirection="Horizontal" Style="margin: 3rem">
+        <ItemTemplate>
+            <div class="card" style="width: 18rem; margin-right: 1rem;background-color:darkgray;" >
+                <img class=""  src='<%#Eval("UserPic") %>' alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:aqua;background-color:darkgray;">Name : <%#Eval("username") %></h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" style="color:aqua;background-color:darkgray;">ID : <%#Eval("id") %></li>
+                    <li class="list-group-item" style="color:aqua;background-color:darkgray;">Email : <%#Eval("email") %></li>
+                </ul>
+               
+            </div>
+        </ItemTemplate>
+    </asp:DataList>
+</div>
+
+
+Be ->
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace MasterPage
+{
+    public partial class UserProfile : System.Web.UI.Page
+    {
+        SqlConnection conn;
+        private object session;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["dbconn"].ConnectionString;
+            conn = new SqlConnection(cs);
+            conn.Open();
+
+            if (Session["email"] != null)
+            {
+                FetchUserDetails();
+            }
+
+        }
+
+        public void FetchUserDetails()
+        {
+            string userEmail = Session["email"].ToString();
+            string q = $"exec FindUsernameByEmail '{userEmail}'";
+            SqlDataAdapter ada = new SqlDataAdapter(q, conn);
+
+            DataTable dt = new DataTable();
+            ada.Fill(dt);
+
+            DataList1.DataSource = dt;
+            DataList1.DataBind();
+        }
+    }
+}
