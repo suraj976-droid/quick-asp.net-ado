@@ -1,0 +1,96 @@
+Web Form with User Control  - user Control File - ascx  Extension
+
+and use it another Web form - aspx
+
+Fe: ascx ->
+
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="WebUserControl1.ascx.cs" Inherits="MasterPage.WebUserControl1" %>
+<p>
+    Name<asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+</p>
+<p>
+    Email<asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+</p>
+<p>
+    <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Button" />
+</p>
+
+
+Be: ascx ->
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace MasterPage
+{
+	public partial class WebUserControl1 : System.Web.UI.UserControl
+	{
+		protected void Page_Load(object sender, EventArgs e)
+		{
+
+		}
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+			string email = TextBox1.Text ;
+			string pass = TextBox2.Text;
+
+			if (pass == "123")
+			{
+				Response.Write("<script>alert('Logged In')</script>");
+			}
+			else
+			{
+				Response.Write("<script>alert('Incorrect Password')</script>");
+
+            }
+        }
+    }
+}
+
+
+Use In WebForm
+
+Fe ->
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="MasterPage.WebForm1" %>
+
+<%@ Register Src="~/WebUserControl1.ascx" TagPrefix="a" TagName="b"%>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <a:b runat="server"/>
+
+        </div>
+    </form>
+</body>
+</html>
+
+
+Be -> 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace MasterPage
+{
+	public partial class WebForm1 : System.Web.UI.Page
+	{
+		protected void Page_Load(object sender, EventArgs e)
+		{
+
+		}
+	}
+}
